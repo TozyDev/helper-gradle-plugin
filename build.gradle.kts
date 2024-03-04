@@ -1,5 +1,8 @@
 @file:Suppress("UnstableApiUsage")
 
+fun Project.envOrProp(env: String, prop: String): Provider<String> =
+    providers.environmentVariable(env).orElse(providers.gradleProperty(prop))
+
 plugins {
     `kotlin-dsl`
     signing
@@ -51,5 +54,20 @@ tasks {
 
     validatePlugins {
         enableStricterValidation = true
+    }
+}
+
+publishing {
+    repositories {
+        maven("https://maven.fury.io/grassmc/") {
+            name = "fury"
+            authentication {
+                create<BasicAuthentication>("basic")
+            }
+            credentials {
+                username = envOrProp("FURY_TOKEN", "fury.token").get()
+                password = envOrProp("FURY_PASSWORD", "fury.password").get()
+            }
+        }
     }
 }
