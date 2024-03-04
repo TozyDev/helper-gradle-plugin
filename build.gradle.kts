@@ -66,8 +66,8 @@ publishing {
                 create<BasicAuthentication>("basic")
             }
             credentials {
-                username = envOrProp("FURY_TOKEN", "fury.token").get()
-                password = envOrProp("FURY_PASSWORD", "fury.password").get()
+                username = envOrProp("FURY_TOKEN", "fury.token").orNull
+                password = envOrProp("FURY_PASSWORD", "fury.password").orNull
             }
         }
     }
