@@ -42,9 +42,9 @@ gradlePlugin {
 
 signing {
     useInMemoryPgpKeys(
-        envOrProp("GPG_SIGNING_KEY_ID", "gpg.signing.keyId").orNull,
-        envOrProp("GPG_SIGNING_KEY", "gpg.signing.key").map { it.replace("\\n", "\n") }.orNull,
-        envOrProp("GPG_SIGNING_PASSWORD", "gpg.signing.password").orNull
+        envOrProp("GPG_KEY_ID", "gpg.keyId").orNull,
+        envOrProp("GPG_KEY", "gpg.key").map { it.replace("\\n", "\n") }.orNull,
+        envOrProp("GPG_PASSWORD", "gpg.password").orNull
     )
 }
 
