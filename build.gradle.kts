@@ -41,10 +41,11 @@ gradlePlugin {
 }
 
 signing {
-    val signingKeyId: String? by project
-    val signingKey: String? by project
-    val signingPassword: String? by project
-    useInMemoryPgpKeys(signingKeyId, signingKey?.replace("\\n", "\n"), signingPassword)
+    useInMemoryPgpKeys(
+        envOrProp("GPG_SIGNING_KEY_ID", "gpg.signing.keyId").orNull,
+        envOrProp("GPG_SIGNING_KEY", "gpg.signing.key").map { it.replace("\\n", "\n") }.orNull,
+        envOrProp("GPG_SIGNING_PASSWORD", "gpg.signing.password").orNull
+    )
 }
 
 tasks {
