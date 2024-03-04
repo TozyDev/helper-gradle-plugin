@@ -5,6 +5,7 @@
       "release-type": "java",
       "bump-minor-pre-major": true,
       "include-component-in-tag": false,
+      "initial-version": "0.1.0",
       "extra-files": [
         "gradle.properties"
       ]
