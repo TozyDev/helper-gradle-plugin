@@ -1,5 +1,8 @@
 @file:Suppress("UnstableApiUsage")
 
+fun Project.envOrProp(env: String, prop: String): Provider<String> =
+    providers.environmentVariable(env).orElse(providers.gradleProperty(prop))
+
 plugins {
     `kotlin-dsl`
     signing
@@ -38,10 +41,11 @@ gradlePlugin {
 }
 
 signing {
-    val signingKeyId: String? by project
-    val signingKey: String? by project
-    val signingPassword: String? by project
-    useInMemoryPgpKeys(signingKeyId, signingKey?.replace("\\n", "\n"), signingPassword)
+    useInMemoryPgpKeys(
+        envOrProp("GPG_KEY_ID", "gpg.keyId").orNull,
+        envOrProp("GPG_KEY", "gpg.key").map { it.replace("\\n", "\n") }.orNull,
+        envOrProp("GPG_PASSWORD", "gpg.password").orNull
+    )
 }
 
 tasks {
@@ -51,5 +55,20 @@ tasks {
 
     validatePlugins {
         enableStricterValidation = true
+    }
+}
+
+publishing {
+    repositories {
+        maven("https://maven.fury.io/grassmc/") {
+            name = "fury"
+            authentication {
+                create<BasicAuthentication>("basic")
+            }
+            credentials {
+                username = envOrProp("FURY_TOKEN", "fury.token").orNull
+                password = envOrProp("FURY_PASSWORD", "fury.password").orNull
+            }
+        }
     }
 }
