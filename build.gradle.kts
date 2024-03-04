@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 plugins {
     `kotlin-dsl`
     signing
@@ -8,7 +10,25 @@ repositories {
     mavenCentral()
 }
 
+testing {
+    suites {
+        val test by getting(JvmTestSuite::class) {
+            useKotlinTest(embeddedKotlinVersion)
+        }
+
+        val functionalTest by registering(JvmTestSuite::class) {
+            testType = TestSuiteType.FUNCTIONAL_TEST
+            useKotlinTest(embeddedKotlinVersion)
+
+            dependencies {
+                implementation(project())
+            }
+        }
+    }
+}
+
 gradlePlugin {
+    testSourceSets.add(sourceSets["functionalTest"])
     val helper by plugins.creating {
         val pluginId: String by project
         val pluginClass: String by project
@@ -25,6 +45,10 @@ signing {
 }
 
 tasks {
+    named<Task>("check") {
+        dependsOn(testing.suites.named("functionalTest"))
+    }
+
     validatePlugins {
         enableStricterValidation = true
     }
