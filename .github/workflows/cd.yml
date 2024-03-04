@@ -1,0 +1,55 @@
+name: Plugin CD
+on:
+  workflow_run:
+    workflows: [ Plugin CI ]
+    types: [ completed ]
+    branches: [ main ]
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.event.number || github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    outputs:
+      release-created: ${{ steps.release.outputs.release_created }}
+
+    steps:
+      - name: Release Please Action
+        id: release
+        uses: google-github-actions/release-please-action@v4
+        with:
+          release-type: java
+
+  publish:
+    needs: [ release ]
+    if: ${{ needs.release.outputs.release-created == 'true' }}
+    runs-on: ubuntu-latest
+    environment:
+      name: GrassMC Fury Repository
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: zulu
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-home-cache-cleanup: true
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew build publish
