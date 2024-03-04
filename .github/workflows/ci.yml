@@ -1,14 +1,12 @@
 name: Plugin CI
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
+    paths-ignore: [ README.md, gradle.properties, .github/.release-please-manifest.json ]
 
   pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
+    types: [ opened, synchronize, reopened ]
+    paths-ignore: [ README.md, gradle.properties, .github/.release-please-manifest.json ]
 
 jobs:
   validate-wrapper:
