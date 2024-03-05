@@ -60,14 +60,14 @@ tasks {
 
 publishing {
     repositories {
-        maven("https://maven.fury.io/grassmc/") {
-            name = "fury"
+        maven("https://repo.enchantedgrass.top/releases") {
+            name = "grassmc-releases"
             authentication {
                 create<BasicAuthentication>("basic")
             }
             credentials {
-                username = envOrProp("FURY_TOKEN", "fury.token").orNull
-                password = envOrProp("FURY_PASSWORD", "fury.password").orNull
+                username = envOrProp("GRASSMC_USERNAME", "grassmc.username").orNull
+                password = envOrProp("GRASSMC_TOKEN", "grassmc.token").orNull
             }
         }
     }

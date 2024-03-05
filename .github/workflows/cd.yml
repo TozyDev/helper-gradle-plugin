@@ -32,7 +32,7 @@ jobs:
     if: ${{ needs.release.outputs.release-created == 'true' }}
     runs-on: ubuntu-latest
     environment:
-      name: GrassMC Fury Repository
+      name: GrassMC Release Repository
 
     steps:
       - name: Checkout repository
@@ -55,8 +55,8 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build publish
         env:
-          FURY_TOKEN: ${{ secrets.FURY_TOKEN }}
-          FURY_PASSWORD: ${{ secrets.FURY_PASSWORD }}
+          GRASSMC_USERNAME: ${{ secrets.GRASSMC_USERNAME }}
+          GRASSMC_TOKEN: ${{ secrets.GRASSMC_TOKEN }}
           GPG_KEY: ${{ secrets.GPG_KEY }}
           GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
           GPG_PASSWORD: ${{ secrets.GPG_PASSWORD }}
