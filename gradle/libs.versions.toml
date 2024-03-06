@@ -1,2 +1,5 @@
+[libraries]
+foojay-resolver = { module = "org.gradle.toolchains:foojay-resolver", version = "0.8.0" }
+
 [plugins]
 plugin-publish = { id = "com.gradle.plugin-publish", version = "1.2.1" }

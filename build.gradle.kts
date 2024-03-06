@@ -11,6 +11,11 @@ plugins {
 
 repositories {
     mavenCentral()
+    gradlePluginPortal()
+}
+
+dependencies {
+    implementation(libs.foojay.resolver)
 }
 
 testing {
